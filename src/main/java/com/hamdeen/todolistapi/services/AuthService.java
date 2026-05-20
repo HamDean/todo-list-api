@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
