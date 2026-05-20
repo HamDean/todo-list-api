@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface TodoMapper {
-    @Mapping(source = "id", target = "id")
+//    @Mapping(source = "id", target = "id")
     TodoDto toTodoDto(Todo todo);
 }
