@@ -84,6 +84,37 @@ http://localhost:8080
 
 ---
 
+## API Documentation
+
+This project uses **Springdoc OpenAPI** to generate interactive API documentation.
+
+Once the application is running, you can access:
+
+### Swagger UI
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+or
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+### OpenAPI JSON
+
+```text
+http://localhost:8080/v3/api-docs
+```
+
+Use Swagger UI to:
+
+- View all available endpoints
+- Test API requests directly from the browser
+- Inspect request/response schemas
+- Explore authentication requirements
+
 ## Running Database Migrations
 
 This project uses **Flyway** for database migrations.
@@ -132,6 +163,14 @@ After building, the generated `.jar` file will be available in the `target/` dir
 | `JWT_SECRET`  | Secret key used to sign JWT tokens |
 
 ---
+
+## Features
+
+- JWT-based authentication
+- Todo CRUD operations
+- Flyway database migrations
+- OpenAPI/Swagger documentation
+- Environment-based configuration
 
 ## Git Notes
 
