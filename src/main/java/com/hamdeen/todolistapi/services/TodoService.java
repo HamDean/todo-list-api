@@ -47,7 +47,7 @@ public class TodoService {
 
     public List<TodoDto> getAllTodos() {
         return todoRepository
-                .findAll()
+                .findAllByUserId(getCurrentUser().getId())
                 .stream()
                 .map(todoMapper::toTodoDto)
                 .toList();
@@ -55,7 +55,7 @@ public class TodoService {
 
     public TodoDto updateTodo(Long id, AddTodoRequest request) {
         var todo = todoRepository.findById(id).orElse(null);
-        if (todo == null) {
+        if (todo == null || !todo.getUser().getId().equals(getCurrentUser().getId())) {
             throw new TodoNotFoundException();
         }
 
@@ -70,7 +70,7 @@ public class TodoService {
 
     public void deleteTodo(Long id) {
         var todo = todoRepository.findById(id).orElse(null);
-        if (todo == null) {
+        if (todo == null || !todo.getUser().getId().equals(getCurrentUser().getId())) {
             throw new TodoNotFoundException();
         }
         todoRepository.delete(todo);
