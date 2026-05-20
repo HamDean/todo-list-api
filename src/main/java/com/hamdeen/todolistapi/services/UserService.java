@@ -26,4 +26,8 @@ public class UserService implements UserDetailsService {
                 Collections.emptyList()
         );
     }
+
+    public com.hamdeen.todolistapi.entities.User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow();
+    }
 }

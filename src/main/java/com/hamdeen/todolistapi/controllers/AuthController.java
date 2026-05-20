@@ -7,6 +7,7 @@ import com.hamdeen.todolistapi.dtos.RegisterUserRequest;
 import com.hamdeen.todolistapi.dtos.UserDto;
 import com.hamdeen.todolistapi.services.AuthService;
 import com.hamdeen.todolistapi.services.JwtService;
+import com.hamdeen.todolistapi.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final JwtConfig jwtConfig;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(
@@ -45,10 +47,10 @@ public class AuthController {
         var userAuthObj = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
         authenticationManager.authenticate(userAuthObj);
 
-        var principal = (String) userAuthObj.getPrincipal();
+        var user = userService.getUserByEmail(request.getEmail());
 
-        var token = jwtService.generateAccessToken(principal);
-        var refreshToken = jwtService.generateRefreshToken(principal);
+        var token = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
         var cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/auth/refresh");

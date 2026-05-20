@@ -1,6 +1,7 @@
 package com.hamdeen.todolistapi.services;
 
 import com.hamdeen.todolistapi.configs.JwtConfig;
+import com.hamdeen.todolistapi.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -16,17 +17,18 @@ import java.util.Date;
 public class JwtService {
    private final JwtConfig jwtConfig;
 
-    public String generateAccessToken (String username) {
-        return generateToken(username, jwtConfig.getAccessTokenExpiration());
+    public String generateAccessToken (User user) {
+        return generateToken(user, jwtConfig.getAccessTokenExpiration());
     }
 
-    public String generateRefreshToken (String username) {
-        return generateToken(username, jwtConfig.getRefreshTokenExpiration());
+    public String generateRefreshToken (User user) {
+        return generateToken(user, jwtConfig.getRefreshTokenExpiration());
     }
 
-    public String generateToken(String username, long tokenExpiration) {
+    public String generateToken(User user, long tokenExpiration) {
         return Jwts.builder()
-                .subject(username)
+                .subject(user.getId().toString())
+                .claim("email", user.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
                 .signWith(getSecretKey())
