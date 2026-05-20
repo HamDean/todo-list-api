@@ -7,6 +7,7 @@ import com.hamdeen.todolistapi.exceptions.TodoNotFoundException;
 import com.hamdeen.todolistapi.mappers.TodoMapper;
 import com.hamdeen.todolistapi.repositories.TodoRepository;
 import com.hamdeen.todolistapi.services.TodoService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -42,7 +43,9 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public TodoDto updateTodo(@PathVariable Long id, @RequestBody AddTodoRequest request) {
+    public TodoDto updateTodo(
+            @PathVariable Long id,
+            @Valid @RequestBody AddTodoRequest request) {
         return todoService.updateTodo(id, request);
     }
 
