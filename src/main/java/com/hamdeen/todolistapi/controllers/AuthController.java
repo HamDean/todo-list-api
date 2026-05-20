@@ -1,9 +1,14 @@
 package com.hamdeen.todolistapi.controllers;
 
+import com.hamdeen.todolistapi.configs.JwtConfig;
+import com.hamdeen.todolistapi.dtos.JwtResponse;
 import com.hamdeen.todolistapi.dtos.LoginRequest;
 import com.hamdeen.todolistapi.dtos.RegisterUserRequest;
 import com.hamdeen.todolistapi.dtos.UserDto;
 import com.hamdeen.todolistapi.services.AuthService;
+import com.hamdeen.todolistapi.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +24,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AuthController {
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final JwtConfig jwtConfig;
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(
@@ -31,11 +38,26 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<JwtResponse> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletResponse response
+    ) {
         var userAuthObj = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
         authenticationManager.authenticate(userAuthObj);
 
-        return ResponseEntity.ok().build();
+        var principal = (String) userAuthObj.getPrincipal();
+
+        var token = jwtService.generateAccessToken(principal);
+
+        var cookie = new Cookie("refreshToken", jwtService.generateRefreshToken(principal));
+        cookie.setPath("/auth/refresh");
+        cookie.setMaxAge(jwtConfig.getRefreshTokenExpiration());
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
