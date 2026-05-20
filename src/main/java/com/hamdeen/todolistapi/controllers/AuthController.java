@@ -48,8 +48,9 @@ public class AuthController {
         var principal = (String) userAuthObj.getPrincipal();
 
         var token = jwtService.generateAccessToken(principal);
+        var refreshToken = jwtService.generateRefreshToken(principal);
 
-        var cookie = new Cookie("refreshToken", jwtService.generateRefreshToken(principal));
+        var cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/auth/refresh");
         cookie.setMaxAge(jwtConfig.getRefreshTokenExpiration());
         cookie.setHttpOnly(true);

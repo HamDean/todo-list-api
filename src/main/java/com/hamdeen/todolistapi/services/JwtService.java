@@ -22,11 +22,11 @@ public class JwtService {
         return generateToken(username, jwtConfig.getRefreshTokenExpiration());
     }
 
-    public String generateToken(String username, int tokenExpiration) {
+    public String generateToken(String username, long tokenExpiration) {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000L * tokenExpiration))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
                 .signWith(getSecretKey())
                 .compact();
     }
