@@ -23,6 +23,9 @@ public class Todo {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "created_at")
+    private Date createdAt;
+
     @Column(name = "updated_at")
     private Date updatedAt;
 
