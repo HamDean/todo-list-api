@@ -4,6 +4,7 @@ import com.hamdeen.todolistapi.filters.JwtAuthFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -50,7 +51,11 @@ public class SecurityConfig {
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(c ->
                     c
-                            .requestMatchers("/auth/**").permitAll()
+                            .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
+                            .requestMatchers(
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+                            ).permitAll()
                             .anyRequest().authenticated()
                 )
                 .exceptionHandling(c ->
