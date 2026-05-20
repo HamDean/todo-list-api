@@ -52,4 +52,12 @@ public class TodoService {
 
         return todoMapper.toTodoDto(todo);
     }
+
+    public void deleteTodo(Long id) {
+        var todo = todoRepository.findById(id).orElse(null);
+        if (todo == null) {
+            throw new TodoNotFoundException();
+        }
+        todoRepository.delete(todo);
+    }
 }

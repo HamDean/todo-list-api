@@ -46,6 +46,12 @@ public class TodoController {
         return todoService.updateTodo(id, request);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        todoService.deleteTodo(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(TodoNotFoundException.class)
     public ResponseEntity<String> handleTodoNotFoundException() {
         return ResponseEntity
